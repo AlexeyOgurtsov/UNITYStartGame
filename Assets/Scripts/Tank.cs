@@ -3,33 +3,18 @@
 
 using UnityEngine;
 
-public class Tank : MonoBehaviour, IControllableTank
+public class Tank : ControllableTank
 {
-	public void Awake()
+	public new void Awake()
 	{
 		Debug.Log($"nameof(Awake); Sender=\"{name}\"");
+		base.Awake();
 	}
 
-	public void Start()
+	public new void Start()
 	{
 		Debug.Log($"nameof(Start); Sender=\"{name}\"");
+		base.Start();
 	}
-
-	#region IControllableEntity
-	public void Fire(int FireIndex)
-	{
-		Debug.Log($"{nameof(Fire)}; Sender=\"{name}\", {nameof(FireIndex)}={FireIndex}");
-	}
-
-	public void Thrust(float axisValue)
-	{
-		Debug.Log($"{nameof(Thrust)}; Sender=\"{name}\", {nameof(axisValue)}={axisValue}");
-	}
-
-	public void Rotate(float axisValue)
-	{
-		Debug.Log($"{nameof(Rotate)}; Sender=\"{name}\", {nameof(axisValue)}={axisValue}");
-	}
-	#endregion //IControllableEntity
 }
 
