@@ -1,4 +1,5 @@
-public interface IControllableEntity
+// Like pawn in UE4
+public interface IControllableEntity : IMyGameObject
 {
 	// Fire from weapon if can
 	void Fire(int FireIndex);

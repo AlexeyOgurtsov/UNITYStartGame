@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
-using System.Diagnostics.Contracts;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
@@ -129,7 +128,7 @@ public class TankPlayerController : MonoBehaviour
 		//IEnumerable<ControllableTank> playerEntities = GameObject.FindGameObjectsWithTag(PlayerTag).OfType<ControllableTank>();
 		IEnumerable<GameObject> playerEntities = GameObject.FindGameObjectsWithTag(PlayerTag).Where(o=>o.GetComponent<ControllableTank>() != null);
 		// Checking that GameObject.FindGameObjectsWithTag never returns invalid objects (GameObject to-bool conversion is defined)
-		Contract.Assert(playerEntities.All(o=>o));
+		Debug.Assert(playerEntities.All(o=>o));
 		// C# Note: difference between between FirstOrDefault vs. SingleOrDefault
 		// SingleOrDefault - exception if more than one element
 		var tankGameObjectCandidate = playerEntities.FirstOrDefault(/*o=>o.GetComponent<ControllableTank>() != null*/);
