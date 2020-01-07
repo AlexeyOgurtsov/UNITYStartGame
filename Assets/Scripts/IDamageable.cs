@@ -26,50 +26,84 @@ public enum EDamageSetMode
 	Reset, // Hits points are set as-is	
 }
 
+public class HitCountChangedEventArgs : System.EventArgs {};
+public class HitCountChangingEventArgs : System.EventArgs
+{
+	public int NewHits { get; set; }
+
+	public HitCountChangingEventArgs(int newHits)
+	{
+		this.NewHits = newHits;
+	}
+};
+
+public class MaxHitCountChangedEventArgs : System.EventArgs {};
+public class MaxHitCountChangingEventArgs : System.EventArgs 
+{
+	public int NewMaxHits { get; set; }
+
+	public MaxHitCountChangingEventArgs(int newMaxHits)
+	{
+		this.NewMaxHits = newMaxHits;
+	}
+};
+
 // Interface for damageable scripts
 public interface IDamageable
 {
+	event System.EventHandler<HitCountChangedEventArgs> HitCountChanged;
+	event System.EventHandler<HitCountChangingEventArgs> HitCountChanging;
+
+	event System.EventHandler<MaxHitCountChangedEventArgs> MaxHitCountChanged;
+	event System.EventHandler<MaxHitCountChangingEventArgs> MaxHitCountChanging;
+
+	int HitCount { get; }
+	int MaxHitCount { get; set; }
+
+	// - Will automatically call Destroy;
+	// - Will honor max hits;
+	// - Everything ResetHitCount does;
+	// @RETURNS: hit count really set
+	int SetHitCount(int NewHitCount);
+
+	// - Will fire events;
+	void ResetHitCount(int NewHitCount);
+
 	// Current state of damages;
 	// When set, always set EXACTLY
-	// @TODO: Q. Can we create EXTENSION properties?
-	//DamageState damageState 
-	//{
-	//       	get => GetDamageState();
-	//	set => SetDamageState(value, EDamageStateMode.Reset); 
-	//}
-
+	// WARNING!!! To make reset ever in inactive state, should pass true for bEverIfInactive
 	// returns: count of damage REALLY received
-	int SetDamageState(DamageState newDamageState, EDamageSetMode mode = EDamageSetMode.Normal);
+	int SetDamageState(DamageState newDamageState, EDamageSetMode mode = EDamageSetMode.Normal, bool bEverIfInactive = false);
 	DamageState GetDamageState();
 	// @TODO: Add events (on damaged etc.)
 }
 
-// Extension methods
-public static class DamageableExt
+public static class DamageableExtensions
 {
 	// @TODO: Can we implement extension properties?
+	// We can NOT!
 
 	// returns: amount of damage really received
-	public static int SetHitCount(this IDamageable damageable, int newHitCount)
-	{
-		DamageState damageState = damageable.GetDamageState();
-		damageState.hits = newHitCount;
-		return damageable.SetDamageState(damageState);
-
-	}
+	//public static int SetHitCount(this IDamageable damageable, int newHitCount)
+	//{
+	//	// @TODO: Change: use props instead!
+	//	DamageState damageState = damageable.GetDamageState();
+	//	damageState.hits = newHitCount;
+	//	// WARNING!!! We can NOT invoke events from extension methods!
+	//	//damageable.HitCountChanged?.Invoke(damageable, new HitCountChangedEventArgs());
+	//	return damageable.SetDamageState(damageState);
+///
+	//}
 	public static void SetMaxHitCount(this IDamageable damageable, int newMaxHitCount)
 	{
+		// @TODO: Change: use props instead!
 		DamageState damageState = damageable.GetDamageState();
 		damageState.maxHits = newMaxHitCount;
 		damageable.SetDamageState(damageState);
 	}
 	public static int MakeDamage(this IDamageable damageable, int amount)
 	{
-		return damageable.SetHitCount(damageable.GetHitCount() - amount);
-	}
-	public static int GetHitCount(this IDamageable damageable)
-	{
-		return damageable.GetDamageState().hits;
+		return damageable.SetHitCount(damageable.HitCount - amount);
 	}
 	public static int GetMaxHits(this IDamageable damageable)
 	{
@@ -77,16 +111,16 @@ public static class DamageableExt
 	}
 	public static bool AreHitsOver(this IDamageable damageable)
 	{
-		return damageable.GetHitCount() > damageable.GetMaxHits();
+		return damageable.HitCount > damageable.MaxHitCount;
 	}
 	public static bool AreHitsMaximum(this IDamageable damageable)
 	{
-		return damageable.GetHitCount() == damageable.GetMaxHits();
+		return damageable.HitCount == damageable.MaxHitCount;
 	}
 	// Checks whether the given hit count is at zero or below zero
 	public static bool IsTotallyDamaged(this IDamageable damageable)
 	{
-		return damageable.GetHitCount() <= 0;
+		return damageable.HitCount <= 0;
 	}
 }
 public static class DamageableUtils

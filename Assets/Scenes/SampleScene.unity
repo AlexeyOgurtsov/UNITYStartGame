@@ -313,6 +313,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18a149ebb9daa0a40abe6e7ad2be9db3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHits: 10
+  hits: 5
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -706,3 +708,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18a149ebb9daa0a40abe6e7ad2be9db3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHits: 100
+  hits: 100

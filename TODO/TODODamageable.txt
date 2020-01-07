@@ -1,0 +1,10 @@
+TODO:
+1. Events
+2. Area damage
+
+BUG:
+1. Honor maxHits when change damage state
+
+--- DONE:
+1. Check active/enable state (+DONE)
+2. Expose initial state for damage (+DONE)
