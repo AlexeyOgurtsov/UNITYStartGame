@@ -59,15 +59,37 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "dc0d0439-444b-4012-80b6-c19aefb75662",
-                    "path": "<Mouse>/position/x",
+                    "name": "1D Axis",
+                    "id": "f00199d8-e3e7-4771-ba02-654ef0be95d5",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateGun",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "ba4d5fa0-2fce-40e1-8ab0-25d29361e10d",
+                    "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "RotateGun",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "4581fc20-fac0-48d3-89da-7c6035d1bb31",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateGun",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 },
                 {
                     "name": "1D Axis",

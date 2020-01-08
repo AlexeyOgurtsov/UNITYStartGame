@@ -170,27 +170,27 @@ public class TankPlayerController : MonoBehaviour
 	{
 		if(tank)
 		{
-			if(input.bFire)
+			if (input.bFire)
 			{
 				tank.Fire(0);
 			}
 
-			if(input.bAltFire)
+			if (input.bAltFire)
 			{
 				tank.Fire(1);
 			}
 
-			if( ! Mathf.Approximately(input.axisThrust, 0.0F) )
+			if (!Mathf.Approximately(input.axisThrust, 0.0F) )
 			{
 				tank.Thrust(input.axisThrust);
 			}
 
-			if( ! Mathf.Approximately(input.axisRotate, 0.0F) )
+			if (!Mathf.Approximately(input.axisRotate, 0.0F) )
 			{
 				tank.Rotate(input.axisRotate);
 			}
 
-			if( ! Mathf.Approximately(input.axisRotateGun, 0.0F) )
+			if (!Mathf.Approximately(input.axisRotateGun, 0.0F) )
 			{
 				tank.RotateGun(input.axisRotateGun);
 			}

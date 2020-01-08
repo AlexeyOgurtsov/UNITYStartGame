@@ -1,0 +1,13 @@
+------ Movement and rotation
+
+
+------ Visual appearence
+1. Make transparent
+2. Setup turret sprite position correctly (+DONE)
+
+
+----- Collision
+
+
+----- Turret
+1. Fire

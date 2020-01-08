@@ -7,7 +7,7 @@ public interface IMyGameObject
 {
 	// Returns damageable component, if supports damageable,
 	// or nullptr if does NOT support it!
-	Damageable GetDamageable();
+	IDamageable GetDamageable();
 };
 
 public static class MyGameObjectUtils
@@ -17,9 +17,9 @@ public static class MyGameObjectUtils
 		return obj.GetDamageable() != null;
 	}
 
-	public static Damageable GetDamageableChecked(this IMyGameObject obj)
+	public static IDamageable GetDamageableChecked(this IMyGameObject obj)
 	{
-		Damageable damageable = obj.GetDamageable();
+		IDamageable damageable = obj.GetDamageable();
 		Contract.Assert(damageable != null, $"Using {nameof(GetDamageableChecked)} requires that damageable is included");
 		return damageable;
 	}

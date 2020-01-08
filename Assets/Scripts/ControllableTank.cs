@@ -5,31 +5,31 @@ using UnityEngine;
 
 public class ControllableTank : MonoBehaviour, IControllableTank
 {
-	#region unity framework methods
-	public void Awake()
-	{
-		Debug.Log($"{nameof(Awake)}; Sender=\"{name}\"");
-		// damageable component: may be provided or may be not
-		damageable = GetComponent<Damageable>();
-	}
+	const float TANK_ROTATION_SPEED_DEGS = 10.0F;
 
-	public void Start()
-	{
-		Debug.Log($"{nameof(Start)}; Sender=\"{name}\"");
-	}
-	#endregion // unity framework methods
+	IDamageable damageable;
+	TankTurret turret;
 
-	#region IControllableTank
+	public IDamageable GetDamageable() => damageable;
+
 	public void RotateGun(float axisValue)
 	{
-		// @TODO
+		if(turret)
+		{
+			turret.transform.Rotate(0, 0, axisValue * Time.deltaTime * TANK_ROTATION_SPEED_DEGS);
+		}
 	}
-	#endregion // IControllableTank
 
-	#region IControllableEntity
 	public void Fire(int FireIndex)
 	{
 		Debug.Log($"{nameof(Fire)}; Sender=\"{name}\", {nameof(FireIndex)}={FireIndex}");
+		if(FireIndex == 0)
+		{
+			if(turret)
+			{
+				turret.Fire();
+			}
+		}
 	}
 
 	public void Thrust(float axisValue)
@@ -41,16 +41,23 @@ public class ControllableTank : MonoBehaviour, IControllableTank
 	{
 		// @TODO
 	}
-	#endregion //IControllableEntity
 
-	#region IMyGameObject
-	// Returns damageable interface instance, if supports damageable,
-	// or nullptr if does NOT support it!
-	public Damageable GetDamageable() => damageable;
-	#endregion // IMyGameObject
+	protected void Awake()
+	{
+		Debug.Log($"{nameof(Awake)}; Sender=\"{name}\"");
+		// @TODO: Try to find by tag!
+		turret = GetComponentInChildren<TankTurret>();
+		if(turret == null)
+		{
+			Debug.LogWarning($"Unable to find attached turret script");
+		}
+		// damageable component: may be provided or may be not
+		damageable = GetComponent<IDamageable>();
+	}
 
-	#region damageable
-	Damageable damageable;
-	#endregion // damageable
+	protected void Start()
+	{
+		Debug.Log($"{nameof(Start)}; Sender=\"{name}\"");
+	}
 }
 
