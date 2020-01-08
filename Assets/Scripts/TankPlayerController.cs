@@ -7,7 +7,20 @@ using System.Linq;
 
 public class TankPlayerController : MonoBehaviour
 {
-	#region Controllable config fields
+	DamageableIMGUI debugDamageableGUI;
+
+	ControllableTank tank;
+	// damageable of the controlled tank 
+	IDamageable damageable;
+
+	struct InputState
+	{
+		public float axisThrust, axisRotate, axisRotateGun;
+		public bool bFire;
+		public bool bAltFire;
+	};
+       	InputState input;
+
 	// Prefab of the tank, to be spawned if NO tank found in the scene
 	// Must contain the ControllableTank script!
 	//
@@ -19,57 +32,9 @@ public class TankPlayerController : MonoBehaviour
 	
 	// ControllableTank's script to init if there's no one found in the scene
 	public ControllableTank templTank;
-	#endregion // Controllable config fields
 
-	#region Input config fields
 	public bool bLogAxisInput = false;
-	#endregion // Input config fields
 
-	#region Unity Game Object Messages
-	public void Awake()
-	{
-		Debug.Log(MethodBase.GetCurrentMethod().Name);
-		InitializeLinkToTank();
-	}
-
-	public void Start()
-	{
-		Debug.Log(MethodBase.GetCurrentMethod().Name);
-	}
-
-	public void FixedUpdate()
-	{
-		if(tank)
-		{
-			if(input.bFire)
-			{
-				tank.Fire(0);
-			}
-
-			if(input.bAltFire)
-			{
-				tank.Fire(1);
-			}
-
-			if( ! Mathf.Approximately(input.axisThrust, 0.0F) )
-			{
-				tank.Thrust(input.axisThrust);
-			}
-
-			if( ! Mathf.Approximately(input.axisRotate, 0.0F) )
-			{
-				tank.Rotate(input.axisRotate);
-			}
-
-			if( ! Mathf.Approximately(input.axisRotateGun, 0.0F) )
-			{
-				tank.RotateGun(input.axisRotateGun);
-			}
-		}
-	}
-	#endregion // Unity Game Object Messages
-
-	#region Input actions
 	public void InputAction_RotateGun(InputAction.CallbackContext context)
 	{
 		float axisValue = context.ReadValue<float>();
@@ -109,15 +74,18 @@ public class TankPlayerController : MonoBehaviour
 		}
 		input.axisThrust = axisValue;
 	}
-	#endregion Input actions
 
-	struct InputState
+	void Awake()
 	{
-		public float axisThrust, axisRotate, axisRotateGun;
-		public bool bFire;
-		public bool bAltFire;
-	};
-       	InputState input;
+		Debug.Log(MethodBase.GetCurrentMethod().Name);
+		InitializeDebugGUI();
+		InitializeLinkToTank();
+	}
+
+	void InitializeDebugGUI()
+	{
+		debugDamageableGUI = GetComponent<DamageableIMGUI>();
+	}
 
 	void InitializeLinkToTank()
 	{
@@ -146,13 +114,11 @@ public class TankPlayerController : MonoBehaviour
 			}
 		}
 
-		
-
-		if( ! tank )
+		if (!tank)
 		{
 			Debug.LogWarning($"Failed to find game object with tag \"{PlayerTag}\" and of type {nameof(ControllableTank)}");
 
-			if( ! templTank )
+			if (!templTank)
 			{
 				Debug.LogError($"Unable to spawn tank - {nameof(templTank)} is null");
 				// @TODO: abort gameplay execution (throw critical exception?) 
@@ -168,7 +134,7 @@ public class TankPlayerController : MonoBehaviour
 			}
 		}
 		
-		if( tank )
+		if (tank)
 		{
 			Debug.Log($"Now we use {tank.name} of class {tank.GetType()} as controllable tank");
 		}
@@ -178,10 +144,56 @@ public class TankPlayerController : MonoBehaviour
 			return;
 		}
 
-		if( ! tank.CompareTag(PlayerTag) )
+		if (!tank.CompareTag(PlayerTag))
 		{
 			tank.tag = PlayerTag;
 		}
 	}
-	ControllableTank tank;
+
+	void Start()
+	{
+		Debug.Log(MethodBase.GetCurrentMethod().Name);
+		InitializeOnPossess();
+	}
+
+	// To be called right after the possessed tank is changed
+	void InitializeOnPossess()
+	{
+		damageable = tank ? tank.GetComponent<IDamageable>() : null;
+		if(debugDamageableGUI)
+		{
+			debugDamageableGUI.Damageable = damageable;
+		}
+	}
+
+	void FixedUpdate()
+	{
+		if(tank)
+		{
+			if(input.bFire)
+			{
+				tank.Fire(0);
+			}
+
+			if(input.bAltFire)
+			{
+				tank.Fire(1);
+			}
+
+			if( ! Mathf.Approximately(input.axisThrust, 0.0F) )
+			{
+				tank.Thrust(input.axisThrust);
+			}
+
+			if( ! Mathf.Approximately(input.axisRotate, 0.0F) )
+			{
+				tank.Rotate(input.axisRotate);
+			}
+
+			if( ! Mathf.Approximately(input.axisRotateGun, 0.0F) )
+			{
+				tank.RotateGun(input.axisRotateGun);
+			}
+		}
+	}
 }

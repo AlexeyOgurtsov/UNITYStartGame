@@ -1,6 +1,14 @@
 TODO:
 1. Events
 2. Area damage
+3. Enable state
+
+TODO Events:
+1. Basic code (+DONE)
+2. Test
+
+TODO Enable state:
+1. Change enable state dynamically
 
 BUG:
 1. Honor maxHits when change damage state

@@ -1,1 +1,3 @@
-Make damageable UI for player
+Make damageable UI for player:
+1. Make IMGUI (+DONE)
+3. Integrate into the tank player controller (+DONE)
