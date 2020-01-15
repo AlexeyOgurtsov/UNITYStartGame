@@ -172,12 +172,12 @@ public class TankPlayerController : MonoBehaviour
 		{
 			if (input.bFire)
 			{
-				tank.Fire(0);
+				tank.FireIfCan(0);
 			}
 
 			if (input.bAltFire)
 			{
-				tank.Fire(1);
+				tank.FireIfCan(1);
 			}
 
 			if (!Mathf.Approximately(input.axisThrust, 0.0F) )

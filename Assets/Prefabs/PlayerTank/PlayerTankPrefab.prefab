@@ -142,6 +142,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1310015290066247331}
     m_Modifications:
+    - target: {fileID: -3073826425278959307, guid: 359085c17fbf59840902f40f5260fa2b,
+        type: 3}
+      propertyPath: ProjectileTemplate
+      value: 
+      objectReference: {fileID: 6035733905511225500, guid: 139a6d7b88f238a43809cb56e86a0a0b,
+        type: 3}
+    - target: {fileID: -3073826425278959307, guid: 359085c17fbf59840902f40f5260fa2b,
+        type: 3}
+      propertyPath: bLogGameplayFailsInsideCanFire
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 675835818460554496, guid: 359085c17fbf59840902f40f5260fa2b,
         type: 3}
       propertyPath: m_Name
@@ -207,6 +218,11 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4640371189148494352, guid: 359085c17fbf59840902f40f5260fa2b,
+        type: 3}
+      propertyPath: ProjectileTemplate
+      value: 
+      objectReference: {fileID: 2800000, guid: 290ca10992bc14f4ab4c65335e13fc9b, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 359085c17fbf59840902f40f5260fa2b, type: 3}
 --- !u!4 &2712508415185433378 stripped

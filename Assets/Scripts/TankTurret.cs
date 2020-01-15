@@ -1,10 +1,3 @@
-using UnityEngine;
-using System.Reflection;
-
-public class TankTurret : MonoBehaviour
+public class TankTurret : SimpleWeapon
 {
-	public void Fire()
-	{
-		// @TODO
-	}
 }

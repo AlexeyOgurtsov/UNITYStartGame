@@ -1,0 +1,1 @@
+1. Handle destruction of the controllable tank.

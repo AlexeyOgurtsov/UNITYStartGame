@@ -20,14 +20,14 @@ public class ControllableTank : MonoBehaviour, IControllableTank
 		}
 	}
 
-	public void Fire(int FireIndex)
+	public void FireIfCan(int FireIndex)
 	{
-		Debug.Log($"{nameof(Fire)}; Sender=\"{name}\", {nameof(FireIndex)}={FireIndex}");
+		Debug.Log($"{nameof(FireIfCan)}; Sender=\"{name}\", {nameof(FireIndex)}={FireIndex}");
 		if(FireIndex == 0)
 		{
 			if(turret)
 			{
-				turret.Fire();
+				turret.FireIfCan();
 			}
 		}
 	}
