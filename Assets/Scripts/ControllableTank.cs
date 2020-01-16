@@ -7,6 +7,11 @@ public class ControllableTank : MonoBehaviour, IControllableTank
 {
 	const float TANK_ROTATION_SPEED_DEGS = 10.0F;
 
+	public enum FireIndex
+	{
+		Turret
+	};
+
 	IDamageable damageable;
 	TankTurret turret;
 
@@ -20,15 +25,30 @@ public class ControllableTank : MonoBehaviour, IControllableTank
 		}
 	}
 
-	public void FireIfCan(int FireIndex)
+	public void FireIfCan(int fireIndexValue)
 	{
-		Debug.Log($"{nameof(FireIfCan)}; Sender=\"{name}\", {nameof(FireIndex)}={FireIndex}");
-		if(FireIndex == 0)
+		Debug.Log($"{nameof(FireIfCan)}; Sender=\"{name}\", {nameof(fireIndexValue)}={fireIndexValue}");
+		var fireIndex = (FireIndex)fireIndexValue;
+		switch(fireIndex)
 		{
-			if(turret)
+			case FireIndex.Turret:
 			{
-				turret.FireIfCan();
+				FireTurretIfCan();
+				break;
 			}
+
+			default:
+			{
+				throw new System.InvalidOperationException($"Unsupported fire index {nameof(fireIndexValue)}={fireIndexValue}; {nameof(fireIndex)}={fireIndex}");
+			}
+		}
+	}
+
+	void FireTurretIfCan()
+	{
+		if(turret)
+		{
+			turret.FireIfCan();
 		}
 	}
 
