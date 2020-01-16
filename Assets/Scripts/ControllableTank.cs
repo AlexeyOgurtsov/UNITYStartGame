@@ -9,7 +9,8 @@ public class ControllableTank : MonoBehaviour, IControllableTank
 
 	public enum FireIndex
 	{
-		Turret
+		Turret,
+		AltFire
 	};
 
 	IDamageable damageable;
@@ -37,6 +38,12 @@ public class ControllableTank : MonoBehaviour, IControllableTank
 				break;
 			}
 
+			case FireIndex.AltFire:
+			{
+				FireAltIfCan();
+				break;
+			}
+
 			default:
 			{
 				throw new System.InvalidOperationException($"Unsupported fire index {nameof(fireIndexValue)}={fireIndexValue}; {nameof(fireIndex)}={fireIndex}");
@@ -44,12 +51,17 @@ public class ControllableTank : MonoBehaviour, IControllableTank
 		}
 	}
 
-	void FireTurretIfCan()
+	public void FireTurretIfCan()
 	{
 		if(turret)
 		{
 			turret.FireIfCan();
 		}
+	}
+	public void FireAltIfCan()
+	{
+		Debug.LogWarning($"{nameof(FireIndex.AltFire)} is not yet implemented");
+		// @TODO
 	}
 
 	public void Thrust(float axisValue)

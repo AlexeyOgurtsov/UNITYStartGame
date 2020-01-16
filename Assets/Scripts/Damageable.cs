@@ -73,7 +73,6 @@ public class Damageable : MonoBehaviour, IDamageable
 	}
 	public int SetDamageStateEverIfInactive(DamageState newDamageState, EDamageSetMode mode = EDamageSetMode.Normal)
 	{
-
 		// HINT: The only way we can call interface extensions methods from the class itself:
 		//int oldHitCount = this.GetHitCount();
 		int oldHitCount = HitCount;

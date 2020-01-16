@@ -172,12 +172,12 @@ public class TankPlayerController : MonoBehaviour
 		{
 			if (input.bFire)
 			{
-				tank.FireIfCan(0);
+				tank.FireTurretIfCan();
 			}
 
 			if (input.bAltFire)
 			{
-				tank.FireIfCan(1);
+				tank.FireAltIfCan();
 			}
 
 			if (!Mathf.Approximately(input.axisThrust, 0.0F) )
