@@ -2,21 +2,20 @@ using UnityEngine;
 using System.Reflection;
 using System.Diagnostics.Contracts;
 
-// @TODO BUGs
-// No projectile visible
-
 // @TODO
+// BUG: Bug when trying to instantiate the projectile template!
+//
 // Show muzzle
 // Projectile property validation
 // Field grouping
 // Consider event support
 
-public class SimpleWeapon : MonoBehaviour
+public class ProjectileShooter : MonoBehaviour
 {
 	public const float DEFAULT_MIN_SECONDS_BETWEEN_SHOTS = 1;
 	public const int DEFAULT_SHOT_COUNT = 10;
 
-	public GameObject ProjectileTemplate;
+	public Projectile ProjectileTemplate;
 	public float MinSecondsBetweenShots = DEFAULT_MIN_SECONDS_BETWEEN_SHOTS;
 	public int ShotCount = DEFAULT_SHOT_COUNT;
 	public bool IsShotCountLimited = true;
@@ -57,7 +56,7 @@ public class SimpleWeapon : MonoBehaviour
 	bool CanFireDueToNextShotTime(float currentTime) => currentTime >= MinAllowedNextShotTime;
 	void LogFireDueToNextShotTime_IfLoggingItEnabled(float currentTime)
 	{
-		if(bLogGameplayFailsInsideCanFire)
+		if (bLogGameplayFailsInsideCanFire)
 		{
 			Debug.Log($"Gameplay prohibits fire due to next shot time: {nameof(currentTime)}={currentTime}; {nameof(MinAllowedNextShotTime)}={MinAllowedNextShotTime}");
 		}
@@ -66,7 +65,7 @@ public class SimpleWeapon : MonoBehaviour
 	bool CanFireDueToShotCount() => !IsShotCountLimited || ShotCount > 0;
 	void LogFireDueToShotCount_IfLoggingItEnabled()
 	{
-		if(bLogGameplayFailsInsideCanFire)
+		if (bLogGameplayFailsInsideCanFire)
 		{
 			Debug.Log($"Gameplay prohibits fire due to shot count: {nameof(IsShotCountLimited)}={IsShotCountLimited}; {nameof(ShotCount)}={ShotCount}");
 		}
@@ -74,12 +73,13 @@ public class SimpleWeapon : MonoBehaviour
 
 	void DoFire()
 	{		
+		Contract.Assert(ProjectileTemplate != null);
 		if (!Instantiate(ProjectileTemplate, ComputeMuzzleWorldPosition3D(), transform.rotation))
 		{
 			Debug.LogError($"Failed to instantiate projectile of class \"{ProjectileTemplate?.GetType()}\"");
 			return;
 		}
-
+		// @TODO: Initialize projectile here: setup instigator
 		MinAllowedNextShotTime = Time.time + MinSecondsBetweenShots;
 		DecreaseShotCountIfShould();
 	}

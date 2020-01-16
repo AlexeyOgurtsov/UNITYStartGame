@@ -1,0 +1,3 @@
+1. Should SUBORDINATE (child) subobjects (like, turret, for example),
+be inherited from gameplay object?
+2. Which scripts we should treat like components, and which scripts we should treat like objects?

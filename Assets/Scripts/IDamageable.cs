@@ -83,23 +83,8 @@ public interface IDamageable
 
 public static class DamageableExtensions
 {
-	// @TODO: Can we implement extension properties?
-	// We can NOT!
-
-	// returns: amount of damage really received
-	//public static int SetHitCount(this IDamageable damageable, int newHitCount)
-	//{
-	//	// @TODO: Change: use props instead!
-	//	DamageState damageState = damageable.GetDamageState();
-	//	damageState.Hits = newHitCount;
-	//	// WARNING!!! We can NOT invoke events from extension methods!
-	//	//damageable.HitCountChanged?.Invoke(damageable, new HitCountChangedEventArgs());
-	//	return damageable.SetDamageState(damageState);
-///
-	//}
 	public static void SetMaxHitCount(this IDamageable damageable, int newMaxHitCount)
 	{
-		// @TODO: Change: use props instead!
 		DamageState damageState = damageable.GetDamageState();
 		damageState.MaxHits = newMaxHitCount;
 		damageable.SetDamageState(damageState);
@@ -108,29 +93,17 @@ public static class DamageableExtensions
 	{
 		return damageable.SetHitCount(damageable.HitCount - amount);
 	}
-	public static int GetMaxHits(this IDamageable damageable)
-	{
-		return damageable.GetDamageState().MaxHits;
-	}
-	public static bool AreHitsOver(this IDamageable damageable)
-	{
-		return damageable.HitCount > damageable.MaxHitCount;
-	}
-	public static bool AreHitsMaximum(this IDamageable damageable)
-	{
-		return damageable.HitCount == damageable.MaxHitCount;
-	}
+
+	public static int GetMaxHits(this IDamageable damageable) => damageable.GetDamageState().MaxHits;
+	public static bool AreHitsOver(this IDamageable damageable) => damageable.HitCount > damageable.MaxHitCount;
+	public static bool AreHitsMaximum(this IDamageable damageable) => damageable.HitCount == damageable.MaxHitCount;
 	// Checks whether the given hit count is at zero or below zero
-	public static bool IsTotallyDamaged(this IDamageable damageable)
-	{
-		return damageable.HitCount <= 0;
-	}
+	public static bool IsTotallyDamaged(this IDamageable damageable) => damageable.HitCount <= 0;
 }
 public static class DamageableUtils
 {
 	public static int MakeDamage(GameObject gameObject, int damage, bool bLogOnFailure = false)
 	{
-		// OK: We DO may safely search component by interfaces!
 		Component mainScript = gameObject.GetComponent<IMyGameObject>() as Component;
 		if(mainScript == null)
 		{

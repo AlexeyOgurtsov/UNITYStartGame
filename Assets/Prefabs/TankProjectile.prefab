@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6035733905511225497}
   - component: {fileID: 550055978046362619}
   - component: {fileID: 229958229790022997}
+  - component: {fileID: 248121493101680087}
   m_Layer: 0
   m_Name: TankProjectile
   m_TagString: Untagged
@@ -146,3 +147,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 10
+  ShouldSelfDestructOnMakeDamage: 1
+  InstigatorPawnField: {fileID: 0}
+  ShouldDamageInstigatorField: 0
+--- !u!114 &248121493101680087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6035733905511225500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5882013d59981024bb87efa24ac642b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InstigatorPawn: {fileID: 0}

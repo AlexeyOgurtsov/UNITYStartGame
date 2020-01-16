@@ -1,2 +1,14 @@
-1. Instigator support: prevent the projectile from damaging the spawner
-2. Think of providing correct type of the projectile field for the simple weapon
+--- TODO Instigator support
+1. When checking whether a particular damageable object to be damaged
+by a damage causer, we must check instigator controller, not instigator pawn!
+Because pawn may be a CHILD object of another object!
+
+- Update DamageCauser's code!
+
+--- TODO Projectile master component
+1. Move ShouldSelfDestructOnMakeDamage into the master component
+
+--- Projectile master component (quick design)
+1. Sets instigator for all damage-causing components
+2. Self-destruction on impact
+

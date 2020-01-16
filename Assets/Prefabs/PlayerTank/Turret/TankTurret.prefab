@@ -92,9 +92,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0ac9f1ee892e014da6fb2e3dd922273, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ProjectileTemplate: {fileID: 6035733905511225500, guid: 8fc4c6bda0a0b5946bfa650e4e0d381d,
+  ProjectileTemplate: {fileID: -8701527475785991168, guid: 139a6d7b88f238a43809cb56e86a0a0b,
     type: 3}
   MinSecondsBetweenShots: 1
   ShotCount: 10
   IsShotCountLimited: 1
   MuzzleOffset: {x: 0, y: 0}
+  bLogGameplayFailsInsideCanFire: 0

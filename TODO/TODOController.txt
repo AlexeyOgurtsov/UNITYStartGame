@@ -1,1 +1,7 @@
-1. Handle destruction of the controllable tank.
+--------------------
+Extract general controller concept.
+
+TODO: Make reference from pawn to controller also.
+
+--------------------
+Handle destruction of the controllable tank (weak references?).
