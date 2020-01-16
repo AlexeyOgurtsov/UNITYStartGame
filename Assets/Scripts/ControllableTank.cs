@@ -65,12 +65,21 @@ public class ControllableTank : MonoBehaviour, IControllableTank
 	protected void Awake()
 	{
 		Debug.Log($"{nameof(Awake)}; Sender=\"{name}\"");
-		// @TODO: Try to find by tag!
+		LinkToTurrent();
+		LinkToDamageableComponent();
+	}
+
+	void LinkToTurret()
+	{
 		turret = GetComponentInChildren<TankTurret>();
 		if(turret == null)
 		{
 			Debug.LogWarning($"Unable to find attached turret script");
 		}
+	}
+
+	void LinkToDamageableComponent()
+	{
 		// damageable component: may be provided or may be not
 		damageable = GetComponent<IDamageable>();
 	}
