@@ -11,15 +11,15 @@ public class Damageable : MonoBehaviour, IDamageable
 	public event System.EventHandler<MaxHitCountChangedEventArgs> MaxHitCountChanged;
 	public event System.EventHandler<MaxHitCountChangingEventArgs> MaxHitCountChanging;
 
-	public int HitCount => damageState.hits;
+	public int HitCount => damageState.Hits;
 	public int MaxHitCount 
 	{
-	       	get => damageState.maxHits;
+	       	get => damageState.MaxHits;
 		set
 		{
 			var ChangingEventArgs = new MaxHitCountChangingEventArgs(value);
 			OnMaxHitCountChanging(ChangingEventArgs);
-			damageState.maxHits = ChangingEventArgs.NewMaxHits;
+			damageState.MaxHits = ChangingEventArgs.NewMaxHits;
 			var ChangedEventArgs = new MaxHitCountChangedEventArgs();
 			OnMaxHitCountChanged(ChangedEventArgs);
 		}
@@ -32,7 +32,7 @@ public class Damageable : MonoBehaviour, IDamageable
 	{
 		var ChangingEventArgs = new HitCountChangingEventArgs(NewHitCount);
 		OnHitCountChanging(ChangingEventArgs);
-		damageState.hits = ChangingEventArgs.NewHits;
+		damageState.Hits = ChangingEventArgs.NewHits;
 		var ChangedEventArgs = new HitCountChangedEventArgs();
 		OnHitCountChanged(ChangedEventArgs);
 	}
@@ -53,29 +53,46 @@ public class Damageable : MonoBehaviour, IDamageable
 	{
 		if(bEverIfInactive || isActiveAndEnabled)
 		{
-			// HINT: The only way we can call interface extensions methods from the class itself:
-			//int oldHitCount = this.GetHitCount();
-			int oldHitCount = HitCount;
-
-			// NOTE: we cannot here update damage state by copying,
-			// because public properties fire events;
-			MaxHitCount = newDamageState.maxHits;
-			SetHitCount(newDamageState.hits);
-
-			int damageApplied = oldHitCount - newDamageState.hits;
-			// @TODO: Update applied damage count (a chance to override)!
-			if(this.IsTotallyDamaged())
-			{
-				// @TODO: We must broadcast event
-				Destroy(gameObject);
-			}
-			return damageApplied;
+			return SetDamageStateEverIfInactive(newDamageState, mode);
 		}
 		else
 		{
 			return 0;
 		}
 	}
+	public int SetDamageStateIfActiveAndEnabled(DamageState newDamageState, EDamageSetMode mode = EDamageSetMode.Normal)
+	{
+		if(isActiveAndEnabled)
+		{
+			return SetDamageStateEverIfInactive(newDamageState, mode);
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	public int SetDamageStateEverIfInactive(DamageState newDamageState, EDamageSetMode mode = EDamageSetMode.Normal)
+	{
+
+		// HINT: The only way we can call interface extensions methods from the class itself:
+		//int oldHitCount = this.GetHitCount();
+		int oldHitCount = HitCount;
+
+		// NOTE: we cannot here update damage state by copying,
+		// because public properties fire events;
+		MaxHitCount = newDamageState.MaxHits;
+		SetHitCount(newDamageState.Hits);
+
+		int damageApplied = oldHitCount - newDamageState.Hits;
+		// @TODO: Update applied damage count (a chance to override)!
+		if(this.IsTotallyDamaged())
+		{
+			// @TODO: We must broadcast event
+			Destroy(gameObject);
+		}
+		return damageApplied;
+	}
+
 	public DamageState GetDamageState() => damageState;
 
 	protected virtual void OnHitCountChanging(HitCountChangingEventArgs e)

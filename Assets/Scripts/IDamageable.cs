@@ -3,20 +3,20 @@ using System.Diagnostics.Contracts;
 
 public struct DamageState
 {
-	public int hits;
-	public int maxHits;
+	public int Hits;
+	public int MaxHits;
 
-	public DamageState(int hits, int maxHits)
+	public DamageState(int MaxHits)
+	: this(MaxHits, MaxHits)
 	{
-		// WARN! hits DO may be negative
-		Contract.Assert(maxHits > 0);
-		this.hits = hits;
-		this.maxHits = maxHits;
 	}
 
-	public DamageState(int maxHits)
-	: this(maxHits, maxHits)
+	public DamageState(int hits, int MaxHits)
 	{
+		// WARN! hits DO may be negative
+		Contract.Assert(MaxHits > 0);
+		this.Hits = hits;
+		this.MaxHits = MaxHits;
 	}
 };
 
@@ -29,23 +29,23 @@ public enum EDamageSetMode
 public class HitCountChangedEventArgs : System.EventArgs {};
 public class HitCountChangingEventArgs : System.EventArgs
 {
-	public int NewHits { get; set; }
-
 	public HitCountChangingEventArgs(int newHits)
 	{
 		this.NewHits = newHits;
 	}
+
+	public int NewHits { get; set; }
 };
 
 public class MaxHitCountChangedEventArgs : System.EventArgs {};
 public class MaxHitCountChangingEventArgs : System.EventArgs 
 {
-	public int NewMaxHits { get; set; }
-
 	public MaxHitCountChangingEventArgs(int newMaxHits)
 	{
 		this.NewMaxHits = newMaxHits;
 	}
+
+	public int NewMaxHits { get; set; }
 };
 
 // Interface for damageable scripts
@@ -74,6 +74,9 @@ public interface IDamageable
 	// WARNING!!! To make reset ever in inactive state, should pass true for bEverIfInactive
 	// returns: count of damage REALLY received
 	int SetDamageState(DamageState newDamageState, EDamageSetMode mode = EDamageSetMode.Normal, bool bEverIfInactive = false);
+	// returns: count of damage REALLY received
+	int SetDamageStateIfActiveAndEnabled(DamageState newDamageState, EDamageSetMode mode = EDamageSetMode.Normal);
+	int SetDamageStateEverIfInactive(DamageState newDamageState, EDamageSetMode mode = EDamageSetMode.Normal);
 	DamageState GetDamageState();
 	// @TODO: Add events (on damaged etc.)
 }
@@ -88,7 +91,7 @@ public static class DamageableExtensions
 	//{
 	//	// @TODO: Change: use props instead!
 	//	DamageState damageState = damageable.GetDamageState();
-	//	damageState.hits = newHitCount;
+	//	damageState.Hits = newHitCount;
 	//	// WARNING!!! We can NOT invoke events from extension methods!
 	//	//damageable.HitCountChanged?.Invoke(damageable, new HitCountChangedEventArgs());
 	//	return damageable.SetDamageState(damageState);
@@ -98,7 +101,7 @@ public static class DamageableExtensions
 	{
 		// @TODO: Change: use props instead!
 		DamageState damageState = damageable.GetDamageState();
-		damageState.maxHits = newMaxHitCount;
+		damageState.MaxHits = newMaxHitCount;
 		damageable.SetDamageState(damageState);
 	}
 	public static int MakeDamage(this IDamageable damageable, int amount)
@@ -107,7 +110,7 @@ public static class DamageableExtensions
 	}
 	public static int GetMaxHits(this IDamageable damageable)
 	{
-		return damageable.GetDamageState().maxHits;
+		return damageable.GetDamageState().MaxHits;
 	}
 	public static bool AreHitsOver(this IDamageable damageable)
 	{
