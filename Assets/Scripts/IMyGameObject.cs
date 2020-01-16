@@ -10,7 +10,7 @@ public interface IMyGameObject
 	IDamageable GetDamageable();
 };
 
-public static class MyGameObjectUtils
+public static class MyGameObjectExtensions
 {
 	public static bool IsDamageable(this IMyGameObject obj)
 	{

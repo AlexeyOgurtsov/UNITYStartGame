@@ -65,7 +65,7 @@ public class ControllableTank : MonoBehaviour, IControllableTank
 	protected void Awake()
 	{
 		Debug.Log($"{nameof(Awake)}; Sender=\"{name}\"");
-		LinkToTurrent();
+		LinkToTurret();
 		LinkToDamageableComponent();
 	}
 

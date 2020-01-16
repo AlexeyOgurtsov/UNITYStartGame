@@ -3,9 +3,7 @@ using System.Reflection;
 
 public class Damageable : MonoBehaviour, IDamageable
 {
-	public int initialMaxHits = 100;
-	public int initialHits = 100;
-	//public int hits = maxHits; // Compile error!!! We cannot initialize fields from fields
+	DamageState damageState;
 
 	public event System.EventHandler<HitCountChangedEventArgs> HitCountChanged;
 	public event System.EventHandler<HitCountChangingEventArgs> HitCountChanging;
@@ -13,10 +11,7 @@ public class Damageable : MonoBehaviour, IDamageable
 	public event System.EventHandler<MaxHitCountChangedEventArgs> MaxHitCountChanged;
 	public event System.EventHandler<MaxHitCountChangingEventArgs> MaxHitCountChanging;
 
-	public int HitCount 
-	{
-	       	get => damageState.hits;
-	}
+	public int HitCount => damageState.hits;
 	public int MaxHitCount 
 	{
 	       	get => damageState.maxHits;
@@ -29,6 +24,9 @@ public class Damageable : MonoBehaviour, IDamageable
 			OnMaxHitCountChanged(ChangedEventArgs);
 		}
 	}
+
+	public int initialMaxHits = 100;
+	public int initialHits = 100;
 
 	public void ResetHitCount(int NewHitCount)
 	{
@@ -100,25 +98,11 @@ public class Damageable : MonoBehaviour, IDamageable
 		MaxHitCountChanged?.Invoke(this, e);
 	}
 
-	void Update()
-	{
-	}
-
-	void Awake()
-	{
-		Debug.Log($"Damageable: {MethodBase.GetCurrentMethod().Name}; Sender={gameObject.name}");
-		// WARN: At this point public field values are NOT yet AVAILABLE (i.e. initialized to ctor-initialized)!!!
-	}
-
 	void Start()
 	{
 		Debug.Log($"Damageable: {MethodBase.GetCurrentMethod().Name}; Sender={gameObject.name}");
-
 		Debug.Log($"initialHits={initialHits}; initialMaxHits ={initialMaxHits}");
-		// @TODO: when we enabling or disabling component dynamically, 
-		// we must NOT reset the damage state!
 		MaxHitCount = initialMaxHits;
 		SetHitCount(initialHits);
 	}
-	DamageState damageState;
 }
