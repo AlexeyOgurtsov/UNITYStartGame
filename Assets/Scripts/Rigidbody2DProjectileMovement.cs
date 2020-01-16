@@ -12,12 +12,8 @@ public class Rigidbody2DProjectileMovement : MonoBehaviour
 	void Awake()
 	{
 		rb = GetComponent<Rigidbody2D>();
-		// @TODO Check: rigidbody mode dynamic
-		// @TODO Check rigidbody continous collision detection
-		// @TODO Gravity scale to ZERO
-		
-		// WARNING!!! Forward is Z axis!!!
+		// WARNING!!! "Forward is" Z axis (up vector) in 2D!!!
 		rb.velocity = transform.up * projectileSpeed;
-		Debug.Log($"{nameof(Projectile)} spawned: velocity={rb.velocity}; {nameof(projectileSpeed)}={projectileSpeed}");
+		Debug.Log($"{nameof(Rigidbody2DProjectileMovement)} spawned: velocity={rb.velocity}; {nameof(projectileSpeed)}={projectileSpeed}");
 	}	
 }

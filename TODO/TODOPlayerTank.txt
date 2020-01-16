@@ -10,4 +10,5 @@
 
 
 ----- Turret
-1. Fire
+BUG: All projectiles are fired when a single key is pressed.
+

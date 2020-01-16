@@ -1,4 +1,2 @@
 1. Instigator support: prevent the projectile from damaging the spawner
-2. Debug: make flag: does it collide at all
-3. Think of separation of concepts: movement and damage-causing for projectile
-4. Think of providing correct type of the projectile field for the simple weapon
+2. Think of providing correct type of the projectile field for the simple weapon

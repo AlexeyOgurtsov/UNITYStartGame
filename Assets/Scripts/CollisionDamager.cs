@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class CollisionDamager : MonoBehaviour
 {
 	public const int DEFAULT_DAMAGE = 10;
 
@@ -8,7 +8,7 @@ public class Projectile : MonoBehaviour
 
 	void OnCollisionEnter2D(Collision2D collision)
 	{
-		Debug.Log($"{nameof(Projectile)}: {nameof(OnCollisionEnter2D)}");
+		Debug.Log($"{nameof(CollisionDamager)}: {nameof(OnCollisionEnter2D)}");
 
 		// @TODO: Spawn explosition fx
 		DamageableUtils.MakeDamage(collision.gameObject, damage, true);
