@@ -81,7 +81,8 @@ public class TankPlayerController : MonoBehaviour
 	{
 		Debug.Log(MethodBase.GetCurrentMethod().Name);
 		InitializeDebugGUI();
-		InitializeLinkToTank();
+		tank = InstantiateOrKeepOnlySinglePlayableTank();
+		LogControllableTankStatus();
 	}
 
 	void InitializeDebugGUI()
@@ -89,22 +90,20 @@ public class TankPlayerController : MonoBehaviour
 		debugDamageableGUI = GetComponent<DamageableIMGUI>();
 	}
 
-	void InitializeLinkToTank()
+	ControllableTank InstantiateOrKeepOnlySinglePlayableTank()
 	{
-		GameObject tankCandidate = KeepFirstPlayableTank();
+		GameObject tankCandidate = DestructAllPlayableTanksExceptFirst();
 		if (tankCandidate)
 		{
-			tank = tankCandidate.GetComponent<ControllableTank>();
+			return tankCandidate.GetComponent<ControllableTank>();
 		}
 		else
 		{
-			tank = InstantiateTaggedPlayerTank();
+			return InstantiateTaggedPlayerTank();
 		}
-		
-		LogControllableTankStatus();
 	}
 
-	GameObject KeepFirstPlayableTank()
+	GameObject DestructAllPlayableTanksExceptFirst()
 	{
 		IEnumerable<GameObject> playerEntities = FindPlayableTanks();
 		GameObject chosenTank = playerEntities.FirstOrDefault();
