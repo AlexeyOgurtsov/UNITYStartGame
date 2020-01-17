@@ -91,10 +91,10 @@ public class TankPlayerController : MonoBehaviour
 
 	void InitializeLinkToTank()
 	{
-		GameObject tankGameObjectCandidate = KeepFirstPlayableTank();
-		if (tankGameObjectCandidate)
+		GameObject tankCandidate = KeepFirstPlayableTank();
+		if (tankCandidate)
 		{
-			tank = tankGameObjectCandidate.GetComponent<ControllableTank>();
+			tank = tankCandidate.GetComponent<ControllableTank>();
 		}
 		else
 		{
@@ -107,13 +107,13 @@ public class TankPlayerController : MonoBehaviour
 	GameObject KeepFirstPlayableTank()
 	{
 		IEnumerable<GameObject> playerEntities = FindPlayableTanks();
-		GameObject tankGameObjectCandidate = playerEntities.FirstOrDefault();
-		if (!tankGameObjectCandidate)
+		GameObject chosenTank = playerEntities.FirstOrDefault();
+		if (!chosenTank)
 		{
 			Debug.LogWarning($"Failed to find game object with tag \"{PlayerTag}\" and of type {nameof(ControllableTank)}");
 		}
-		DestroyAllGivenTanksExcept(playerEntities,tankGameObjectCandidate);
-		return tankGameObjectCandidate;
+		DestroyAllGivenTanksExcept(playerEntities,chosenTank);
+		return chosenTank;
 	}
 
 	GameObject[] FindPlayableTanks()
