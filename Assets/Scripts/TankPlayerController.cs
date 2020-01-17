@@ -24,7 +24,7 @@ public class TankPlayerController : MonoBehaviour
 		const string RotateGunAxisName = "RotateGun";
 		const string ThrustAxisName = "Thrust";
 		const string FireActionName = "Fire";
-		const string AltFireActionName = "Fire";
+		const string AltFireActionName = "AltFire";
 
 		PlayerInput playerInput;
 		TankPlayerController ownerController;
