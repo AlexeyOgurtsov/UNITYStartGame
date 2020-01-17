@@ -1,27 +1,119 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 using System;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 
+[RequireComponent(typeof(PlayerInput))]
 public class TankPlayerController : MonoBehaviour
 {
 	const string PlayerTag = "Player";
 
 	DamageableIMGUI debugDamageableGUI;
 
-	ControllableTank tank;
+	ControllableTank controllableTank;
 	// damageable of the controlled tank 
 	IDamageable damageable;
 
-	struct InputState
+	class MyInput
 	{
-		public float axisThrust, axisRotate, axisRotateGun;
-		public bool bFire;
-		public bool bAltFire;
+		PlayerInput playerInput;
+		TankPlayerController ownerController;
+
+		public float ThrustAxis, RotationAxis, TurretRotationAxis;
+		public bool IsFiring;
+		public bool IsFiringAlt;
+
+		public MyInput(TankPlayerController ownerController)
+		{
+			Contract.Assert(ownerController);
+			this.ownerController = ownerController;
+		}
+
+		bool ShouldLogAxisInput { get => ownerController.ShouldLogAxisInput; }
+
+		public void InitializeAtUnityAwakeTime()
+		{
+			playerInput = ownerController.GetComponent<PlayerInput>();
+			BindAllActionsToFunctions();
+		}
+
+		void BindAllActionsToFunctions()
+		{
+			BindActionToFunction("Rotate", InputAction_Rotate);	
+			BindActionToFunction("RotateGun", InputAction_RotateGun);	
+			BindActionToFunction("Thrust", InputAction_Thrust);	
+
+			BindActionToFunction("Fire", InputAction_FireGun);	
+			BindActionToFunction("AltFire", InputAction_AltFireGun);	
+		}
+
+		void BindActionToFunction(string actionName, System.Action<InputAction.CallbackContext> startedHandler)
+		{
+			InputAction action = playerInput.actions[actionName];
+
+			if(action != null)
+			{
+				action.started += startedHandler;
+			}
+			else
+			{
+				Debug.LogError($"\"{actionName}\" action is not defined");
+			}
+		}
+
+		#region Input actions
+		void InputAction_Rotate(InputAction.CallbackContext context)
+		{
+			float axisValue = context.ReadValue<float>();
+			if(ShouldLogAxisInput)
+			{
+				Debug.Log($"{MethodBase.GetCurrentMethod().Name}: {nameof(axisValue)}={axisValue}");
+			}
+			RotationAxis = axisValue;
+		}
+
+		void InputAction_RotateGun(InputAction.CallbackContext context)
+		{
+			float axisValue = context.ReadValue<float>();
+			if(ShouldLogAxisInput)
+			{
+				Debug.Log($"{MethodBase.GetCurrentMethod().Name}: {nameof(axisValue)}={axisValue}");
+			}
+			TurretRotationAxis = axisValue;
+		}
+
+		void InputAction_Thrust(InputAction.CallbackContext context)
+		{
+			float axisValue = context.ReadValue<float>();
+			if(ShouldLogAxisInput)
+			{
+				Debug.Log($"{MethodBase.GetCurrentMethod().Name}: {nameof(axisValue)}={axisValue}");
+			}
+			ThrustAxis = axisValue;
+		}
+
+		void InputAction_FireGun(InputAction.CallbackContext context)
+		{
+			Debug.Log(MethodBase.GetCurrentMethod().Name);
+			IsFiring = !IsFiring;
+		}
+
+		void InputAction_AltFireGun(InputAction.CallbackContext context)
+		{
+			// WARNING!!! Unable to read bool value from button also!
+			//bool bPressed = context.ReadValue<bool>();
+			Debug.Log(MethodBase.GetCurrentMethod().Name);
+			IsFiringAlt = !IsFiringAlt;
+		}
+		#endregion // Input actions
 	};
-       	InputState input;
+       	MyInput input;
+
+	public bool ShouldLogAxisInput = false;
 
 	// Prefab of the tank, to be spawned if NO tank found in the scene
 	// Must contain the ControllableTank script!
@@ -33,55 +125,16 @@ public class TankPlayerController : MonoBehaviour
 	// @SEE: https://docs.unity3d.com/Manual/Attributes.html
 	
 	// ControllableTank's script to init if there's no one found in the scene
-	public ControllableTank templTank;
+	public ControllableTank TankTemplate;
 
-	public bool bLogAxisInput = false;
-
-	public void InputAction_RotateGun(InputAction.CallbackContext context)
-	{
-		float axisValue = context.ReadValue<float>();
-		if(bLogAxisInput)
-		{
-			Debug.Log($"{MethodBase.GetCurrentMethod().Name}: {nameof(axisValue)}={axisValue}");
-		}
-		input.axisRotateGun = axisValue;
-	}
-	public void InputAction_FireGun(InputAction.CallbackContext context)
-	{
-		Debug.Log(MethodBase.GetCurrentMethod().Name);
-		input.bFire = !input.bFire;
-	}
-	public void InputAction_AltFireGun(InputAction.CallbackContext context)
-	{
-		// WARNING!!! Unable to read bool value from button also!
-		//bool bPressed = context.ReadValue<bool>();
-		Debug.Log(MethodBase.GetCurrentMethod().Name);
-		input.bAltFire = !input.bAltFire;
-	}
-	public void InputAction_Rotate(InputAction.CallbackContext context)
-	{
-		float axisValue = context.ReadValue<float>();
-		if(bLogAxisInput)
-		{
-			Debug.Log($"{MethodBase.GetCurrentMethod().Name}: {nameof(axisValue)}={axisValue}");
-		}
-		input.axisRotate = axisValue;
-	}
-	public void InputAction_Thrust(InputAction.CallbackContext context)
-	{
-		float axisValue = context.ReadValue<float>();
-		if(bLogAxisInput)
-		{
-			Debug.Log($"{MethodBase.GetCurrentMethod().Name}: {nameof(axisValue)}={axisValue}");
-		}
-		input.axisThrust = axisValue;
-	}
 
 	void Awake()
 	{
 		Debug.Log(MethodBase.GetCurrentMethod().Name);
+		input = new MyInput(this);
+		input.InitializeAtUnityAwakeTime();
 		InitializeDebugGUI();
-		tank = InstantiateOrKeepOnlySinglePlayableTank();
+		controllableTank = InstantiateOrKeepOnlySinglePlayableTank();
 		LogControllableTankStatus();
 	}
 
@@ -132,22 +185,22 @@ public class TankPlayerController : MonoBehaviour
 
 	ControllableTank InstantiateTaggedPlayerTank()
 	{
-		Debug.Log($"Type of tank template object is {templTank.GetType()}");
-		ControllableTank t = Instantiate(templTank, transform.position, transform.rotation) as ControllableTank;
-		if ( ! t )
+		Debug.Log($"Type of tank template object is {TankTemplate.GetType()}");
+		ControllableTank instantiatedTank = Instantiate(TankTemplate, transform.position, transform.rotation) as ControllableTank;
+		if (!instantiatedTank)
 		{
 			Debug.LogError($"Tank instantiation failed");
 			return null;
 		}
-		t.tag = PlayerTag;
-		return t;
+		instantiatedTank.tag = PlayerTag;
+		return instantiatedTank;
 	}
 
 	void LogControllableTankStatus()
 	{
-		if (tank)
+		if (controllableTank)
 		{
-			Debug.Log($"Now we use {tank.name} of class {tank.GetType()} as controllable tank");
+			Debug.Log($"Now we use {controllableTank.name} of class {controllableTank.GetType()} as controllable tank");
 		}
 		else
 		{
@@ -165,7 +218,7 @@ public class TankPlayerController : MonoBehaviour
 	// To be called right after the possessed tank is changed
 	void InitializeOnPossess()
 	{
-		damageable = tank ? tank.GetComponent<IDamageable>() : null;
+		damageable = controllableTank ? controllableTank.GetComponent<IDamageable>() : null;
 		if(debugDamageableGUI)
 		{
 			debugDamageableGUI.Damageable = damageable;
@@ -174,31 +227,31 @@ public class TankPlayerController : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		if(tank)
+		if(controllableTank)
 		{
-			if (input.bFire)
+			if (input.IsFiring)
 			{
-				tank.FireTurretIfCan();
+				controllableTank.FireTurretIfCan();
 			}
 
-			if (input.bAltFire)
+			if (input.IsFiringAlt)
 			{
-				tank.FireAltIfCan();
+				controllableTank.FireAltIfCan();
 			}
 
-			if (!Mathf.Approximately(input.axisThrust, 0.0F) )
+			if (!Mathf.Approximately(input.ThrustAxis, 0.0F) )
 			{
-				tank.Thrust(input.axisThrust);
+				controllableTank.Thrust(input.ThrustAxis);
 			}
 
-			if (!Mathf.Approximately(input.axisRotate, 0.0F) )
+			if (!Mathf.Approximately(input.RotationAxis, 0.0F) )
 			{
-				tank.Rotate(input.axisRotate);
+				controllableTank.Rotate(input.RotationAxis);
 			}
 
-			if (!Mathf.Approximately(input.axisRotateGun, 0.0F) )
+			if (!Mathf.Approximately(input.TurretRotationAxis, 0.0F) )
 			{
-				tank.RotateGun(input.axisRotateGun);
+				controllableTank.RotateGun(input.TurretRotationAxis);
 			}
 		}
 	}
