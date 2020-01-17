@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ControllableTank : MonoBehaviour, IControllableTank
 {
-	const float TANK_ROTATION_SPEED_DEGS = 10.0F;
+	const float RotationSpeedDegs = 10.0F;
 
 	public enum FireIndex
 	{
@@ -22,7 +22,7 @@ public class ControllableTank : MonoBehaviour, IControllableTank
 	{
 		if(turret)
 		{
-			turret.transform.Rotate(0, 0, axisValue * Time.deltaTime * TANK_ROTATION_SPEED_DEGS);
+			turret.transform.Rotate(0, 0, axisValue * Time.fixedDeltaTime * RotationSpeedDegs);
 		}
 	}
 
