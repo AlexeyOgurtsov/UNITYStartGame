@@ -7,6 +7,8 @@ using System.Linq;
 
 public class TankPlayerController : MonoBehaviour
 {
+	const string PlayerTag = "Player";
+
 	DamageableIMGUI debugDamageableGUI;
 
 	ControllableTank tank;
@@ -89,51 +91,61 @@ public class TankPlayerController : MonoBehaviour
 
 	void InitializeLinkToTank()
 	{
-		const string PlayerTag = "Player";
-		// WARNING!!! We must use GameObject. prefix when using FindGameObjectsWithTag, otherwise error!
-		
-		// WRONG: Game objects NEVER to be casted to components!!!
-		//IEnumerable<ControllableTank> playerEntities = GameObject.FindGameObjectsWithTag(PlayerTag).OfType<ControllableTank>();
-		IEnumerable<GameObject> playerEntities = GameObject.FindGameObjectsWithTag(PlayerTag).Where(o=>o.GetComponent<ControllableTank>() != null);
-		// Checking that GameObject.FindGameObjectsWithTag never returns invalid objects (GameObject to-bool conversion is defined)
-		Debug.Assert(playerEntities.All(o=>o));
-		// C# Note: difference between between FirstOrDefault vs. SingleOrDefault
-		// SingleOrDefault - exception if more than one element
-		var tankGameObjectCandidate = playerEntities.FirstOrDefault(/*o=>o.GetComponent<ControllableTank>() != null*/);
-		if(tankGameObjectCandidate)
+		GameObject tankGameObjectCandidate = KeepFirstPlayableTank();
+		if (tankGameObjectCandidate)
 		{
 			tank = tankGameObjectCandidate.GetComponent<ControllableTank>();
-			// Destroying extra player entities
-			{
-				IEnumerable<GameObject> extraPlayerEntities = playerEntities.Where( o => o != tankGameObjectCandidate );
-				foreach(GameObject obj in extraPlayerEntities)
-				{
-					Debug.LogWarning($"Destroying extra player entity: name={obj.name}; type={obj.GetType()}");
-					Destroy(obj);
-				}
-			}
 		}
-
-		if (!tank)
+		else
 		{
-			Debug.LogWarning($"Failed to find game object with tag \"{PlayerTag}\" and of type {nameof(ControllableTank)}");
-
-			if (!templTank)
-			{
-				Debug.LogError($"Unable to spawn tank - {nameof(templTank)} is null");
-				// @TODO: abort gameplay execution (throw critical exception?) 
-			}
-			else
-			{
-				Debug.Log($"Type of tank template object is {templTank.GetType()}");
-				tank = Instantiate(templTank, transform.position, transform.rotation) as ControllableTank;
-				if ( ! tank )
-				{
-					Debug.LogError($"Tank instantiation failed");
-				}
-			}
+			tank = InstantiateTaggedPlayerTank();
 		}
 		
+		LogControllableTankStatus();
+	}
+
+	GameObject KeepFirstPlayableTank()
+	{
+		IEnumerable<GameObject> playerEntities = FindPlayableTanks();
+		GameObject tankGameObjectCandidate = playerEntities.FirstOrDefault();
+		if (!tankGameObjectCandidate)
+		{
+			Debug.LogWarning($"Failed to find game object with tag \"{PlayerTag}\" and of type {nameof(ControllableTank)}");
+		}
+		DestroyAllGivenTanksExcept(playerEntities,tankGameObjectCandidate);
+		return tankGameObjectCandidate;
+	}
+
+	GameObject[] FindPlayableTanks()
+	{
+		return GameObject.FindGameObjectsWithTag(PlayerTag).Where(o=>o.GetComponent<ControllableTank>() != null).ToArray();
+	}
+
+	void DestroyAllGivenTanksExcept(IEnumerable<GameObject> playerEntities, GameObject exceptTank)
+	{
+		IEnumerable<GameObject> extraPlayerEntities = playerEntities.Where( o => o != exceptTank );
+		foreach(GameObject obj in extraPlayerEntities)
+		{
+			Debug.LogWarning($"Destroying extra player entity: name={obj.name}; type={obj.GetType()}");
+			Destroy(obj);
+		}
+	}
+
+	ControllableTank InstantiateTaggedPlayerTank()
+	{
+		Debug.Log($"Type of tank template object is {templTank.GetType()}");
+		ControllableTank t = Instantiate(templTank, transform.position, transform.rotation) as ControllableTank;
+		if ( ! t )
+		{
+			Debug.LogError($"Tank instantiation failed");
+			return null;
+		}
+		t.tag = PlayerTag;
+		return t;
+	}
+
+	void LogControllableTankStatus()
+	{
 		if (tank)
 		{
 			Debug.Log($"Now we use {tank.name} of class {tank.GetType()} as controllable tank");
@@ -142,11 +154,6 @@ public class TankPlayerController : MonoBehaviour
 		{
 			Debug.LogError("Now we have NO tank object to control");
 			return;
-		}
-
-		if (!tank.CompareTag(PlayerTag))
-		{
-			tank.tag = PlayerTag;
 		}
 	}
 
