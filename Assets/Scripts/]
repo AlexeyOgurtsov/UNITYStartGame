@@ -20,12 +20,6 @@ public class TankPlayerController : MonoBehaviour
 
 	class MyInput
 	{
-		const string RotateAxisName = "Rotate";
-		const string RotateGunAxisName = "RotateGun";
-		const string ThrustAxisName = "Thrust";
-		const string FireActionName = "Fire";
-		const string AltFireActionName = "Fire";
-
 		PlayerInput playerInput;
 		TankPlayerController ownerController;
 
@@ -49,12 +43,20 @@ public class TankPlayerController : MonoBehaviour
 
 		void BindAllActionsToFunctions()
 		{
-			BindPerformedHandlerToAction(RotateAxisName, InputAction_Rotate);
-			BindPerformedHandlerToAction(RotateGunAxisName, InputAction_RotateGun);
-			BindPerformedHandlerToAction(ThrustAxisName, InputAction_Thrust);
-
-			BindPerformedHandlerToAction(FireActionName, InputAction_FireTurret);
-			BindPerformedHandlerToAction(AltFireActionName, InputAction_FireAlt);
+			BindActionToFunction("Rotate", InputAction_Rotate, (InputAction.CallbackContext context) =>
+			{
+				RotationAxis = 0;
+			});	
+			BindActionToFunction("RotateGun", InputAction_RotateGun, (InputAction.CallbackContext context) =>
+			{
+				TurretRotationAxis = 0;
+			});	
+			BindActionToFunction("Thrust", InputAction_Thrust, (InputAction.CallbackContext context) =>
+			{
+				ThrustAxis = 0;
+			});	
+			BindPerformedHandlerToAction("Fire", InputAction_FireGun);
+			BindPerformedHandlerToAction("AltFire", InputAction_AltFireGun);
 		}
 
 		void BindPerformedHandlerToAction(string actionName, System.Action<InputAction.CallbackContext> performedHandler)
@@ -71,44 +73,64 @@ public class TankPlayerController : MonoBehaviour
 			}
 		}
 
-		#region Input actions
-		void InputAction_Rotate(InputAction.CallbackContext context) 
+		void BindActionToFunction(string actionName, System.Action<InputAction.CallbackContext> startedHandler, System.Action<InputAction.CallbackContext> performedHandler)
 		{
-			InputAction_FloatAxisChanged(context, RotateAxisName, out RotationAxis);
+			InputAction action = playerInput.actions[actionName];
+
+			if(action != null)
+			{
+				action.started += startedHandler;
+				action.performed += performedHandler;
+			}
+			else
+			{
+				Debug.LogError($"\"{actionName}\" action is not defined");
+			}
+		}
+
+		#region Input actions
+		void InputAction_Rotate(InputAction.CallbackContext context)
+		{
+			float axisValue = context.ReadValue<float>();
+			if(ShouldLogAxisInput)
+			{
+				Debug.Log($"{MethodBase.GetCurrentMethod().Name}: {nameof(axisValue)}={axisValue}");
+			}
+			RotationAxis = axisValue;
 		}
 
 		void InputAction_RotateGun(InputAction.CallbackContext context)
 		{
-			InputAction_FloatAxisChanged(context, RotateGunAxisName, out TurretRotationAxis);
-		}
-
-		void InputAction_Thrust(InputAction.CallbackContext context) 
-		{
-			InputAction_FloatAxisChanged(context, ThrustAxisName, out ThrustAxis);
-		}
-
-		void InputAction_FloatAxisChanged(InputAction.CallbackContext context, string axisName, out float axis)
-		{
-			axis = context.ReadValue<float>();
+			float axisValue = context.ReadValue<float>();
 			if(ShouldLogAxisInput)
 			{
-				Debug.Log($"Value of axis \"{axisName}\" updated to {axis}");
+				Debug.Log($"{MethodBase.GetCurrentMethod().Name}: {nameof(axisValue)}={axisValue}");
 			}
+			TurretRotationAxis = axisValue;
 		}
 
-		void InputAction_FireTurret(InputAction.CallbackContext context) 
+		void InputAction_Thrust(InputAction.CallbackContext context)
 		{
-			InputAction_BoolAxisChanged(context, out IsFiring);
+			float axisValue = context.ReadValue<float>();
+			if(ShouldLogAxisInput)
+			{
+				Debug.Log($"{MethodBase.GetCurrentMethod().Name}: {nameof(axisValue)}={axisValue}");
+			}
+			ThrustAxis = axisValue;
 		}
 
-		void InputAction_FireAlt(InputAction.CallbackContext context) 
+		void InputAction_FireGun(InputAction.CallbackContext context)
 		{
-			InputAction_BoolAxisChanged(context, out IsFiringAlt);
+			Debug.Log(MethodBase.GetCurrentMethod().Name);
+			IsFiring = !IsFiring;
 		}
 
-		void InputAction_BoolAxisChanged(InputAction.CallbackContext context, out bool axis) 
+		void InputAction_AltFireGun(InputAction.CallbackContext context)
 		{
-			axis = context.ReadValue<float>() > 0;
+			// WARNING!!! Unable to read bool value from button also!
+			//bool bPressed = context.ReadValue<bool>();
+			Debug.Log(MethodBase.GetCurrentMethod().Name);
+			IsFiringAlt = !IsFiringAlt;
 		}
 		#endregion // Input actions
 	};

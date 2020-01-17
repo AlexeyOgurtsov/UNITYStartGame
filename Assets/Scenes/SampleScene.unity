@@ -355,9 +355,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87e895cc8fe0180488ab94d9186b9a20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  templTank: {fileID: 2668149054843739123, guid: 9edfb2a10dc53db4896ce5b35001e7ee,
+  ShouldLogAxisInput: 0
+  TankTemplate: {fileID: 2668149054843739123, guid: 9edfb2a10dc53db4896ce5b35001e7ee,
     type: 3}
-  bLogAxisInput: 0
 --- !u!4 &1853463046
 Transform:
   m_ObjectHideFlags: 0
@@ -400,86 +400,31 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_ActionEvents:
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1853463045}
-        m_MethodName: InputAction_FireGun
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.InputSystem.PlayerInput+ActionEvent, Unity.InputSystem,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
     m_ActionId: 121855b7-0772-4ec8-baf0-7ac847264643
     m_ActionName: Gameplay/Fire
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1853463045}
-        m_MethodName: InputAction_RotateGun
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.InputSystem.PlayerInput+ActionEvent, Unity.InputSystem,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
     m_ActionId: ec23294b-8a08-46a9-9b28-273e635ce220
     m_ActionName: Gameplay/RotateGun
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1853463045}
-        m_MethodName: InputAction_Thrust
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.InputSystem.PlayerInput+ActionEvent, Unity.InputSystem,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
     m_ActionId: fc810902-615d-4fa9-bb88-f0b264066be2
     m_ActionName: Gameplay/Thrust
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1853463045}
-        m_MethodName: InputAction_Rotate
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.InputSystem.PlayerInput+ActionEvent, Unity.InputSystem,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
     m_ActionId: fb60af16-1270-4b19-8390-db18f276f6c6
     m_ActionName: Gameplay/Rotate
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1853463045}
-        m_MethodName: InputAction_AltFireGun
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.InputSystem.PlayerInput+ActionEvent, Unity.InputSystem,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
     m_ActionId: bb6cee8c-d055-4d8f-b83e-35cb2903938e

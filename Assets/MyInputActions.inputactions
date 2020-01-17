@@ -7,15 +7,15 @@
             "actions": [
                 {
                     "name": "Fire",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "121855b7-0772-4ec8-baf0-7ac847264643",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
                 },
                 {
                     "name": "RotateGun",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "ec23294b-8a08-46a9-9b28-273e635ce220",
                     "expectedControlType": "Axis",
                     "processors": "",
@@ -23,7 +23,7 @@
                 },
                 {
                     "name": "Thrust",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "fc810902-615d-4fa9-bb88-f0b264066be2",
                     "expectedControlType": "Axis",
                     "processors": "",
@@ -31,7 +31,7 @@
                 },
                 {
                     "name": "Rotate",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "fb60af16-1270-4b19-8390-db18f276f6c6",
                     "expectedControlType": "",
                     "processors": "",
@@ -39,7 +39,7 @@
                 },
                 {
                     "name": "AltFire",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "bb6cee8c-d055-4d8f-b83e-35cb2903938e",
                     "expectedControlType": "",
                     "processors": "",
