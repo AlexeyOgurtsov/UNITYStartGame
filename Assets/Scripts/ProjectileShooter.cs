@@ -12,12 +12,12 @@ using System.Diagnostics.Contracts;
 
 public class ProjectileShooter : MonoBehaviour
 {
-	public const float DEFAULT_MIN_SECONDS_BETWEEN_SHOTS = 1;
-	public const int DEFAULT_SHOT_COUNT = 10;
+	const float DefaultMinSecondsBetweenShots = 1;
+	const int DefaultShotCount = 10;
 
 	public Projectile ProjectileTemplate;
-	public float MinSecondsBetweenShots = DEFAULT_MIN_SECONDS_BETWEEN_SHOTS;
-	public int ShotCount = DEFAULT_SHOT_COUNT;
+	public float MinSecondsBetweenShots = DefaultMinSecondsBetweenShots;
+	public int ShotCount = DefaultShotCount;
 	public bool IsShotCountLimited = true;
 	public Vector2 MuzzleOffset; 
 

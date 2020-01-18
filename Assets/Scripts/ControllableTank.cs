@@ -95,10 +95,5 @@ public class ControllableTank : MonoBehaviour, IControllableTank
 		// damageable component: may be provided or may be not
 		damageable = GetComponent<IDamageable>();
 	}
-
-	protected void Start()
-	{
-		Debug.Log($"{nameof(Start)}; Sender=\"{name}\"");
-	}
 }
 

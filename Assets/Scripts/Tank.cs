@@ -10,11 +10,5 @@ public class Tank : ControllableTank
 		Debug.Log($"nameof(Awake); Sender=\"{name}\"");
 		base.Awake();
 	}
-
-	public new void Start()
-	{
-		Debug.Log($"nameof(Start); Sender=\"{name}\"");
-		base.Start();
-	}
 }
 
