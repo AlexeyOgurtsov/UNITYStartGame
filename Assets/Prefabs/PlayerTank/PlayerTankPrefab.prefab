@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1310015290066247340}
   - component: {fileID: 6709085172561088998}
   - component: {fileID: 2668149054843739123}
-  - component: {fileID: 2290425628699679970}
+  - component: {fileID: 8086190120147464558}
   m_Layer: 0
   m_Name: PlayerTankPrefab
   m_TagString: Untagged
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90a74d75a396bfd43a5f4609002d1758, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2290425628699679970
+--- !u!114 &8086190120147464558
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -130,11 +130,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 1310015290066247341}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18a149ebb9daa0a40abe6e7ad2be9db3, type: 3}
+  m_Script: {fileID: 11500000, guid: d179174b5180e9342a16b804a678bfa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   initialMaxHits: 100
   initialHits: 100
+--- !u!114 &4904749323962083325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2712508415185433376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e63c227faea8494ba685a41b8a70798, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ProjectileTemplate: {fileID: -8701527475785991168, guid: 139a6d7b88f238a43809cb56e86a0a0b,
+    type: 3}
+  MinSecondsBetweenShots: 1
+  ShotCount: 10
+  IsShotCountLimited: 1
+  MuzzleOffset: {x: 0, y: 0}
+  bLogGameplayFailsInsideCanFire: 0
 --- !u!1001 &3226205781400557088
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -223,8 +242,15 @@ PrefabInstance:
       propertyPath: ProjectileTemplate
       value: 
       objectReference: {fileID: 2800000, guid: 290ca10992bc14f4ab4c65335e13fc9b, type: 3}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -3073826425278959307, guid: 359085c17fbf59840902f40f5260fa2b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 359085c17fbf59840902f40f5260fa2b, type: 3}
+--- !u!1 &2712508415185433376 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 675835818460554496, guid: 359085c17fbf59840902f40f5260fa2b,
+    type: 3}
+  m_PrefabInstance: {fileID: 3226205781400557088}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2712508415185433378 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 675835818460554498, guid: 359085c17fbf59840902f40f5260fa2b,

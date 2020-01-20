@@ -1,0 +1,45 @@
+============= GameObject-like hierarchy
+Represents the essential behaviour of the particular type of game object
+(For example, Projectile or Pawn).
+
+==== GameObject hierarchy with Components/Behaviours instead of the GameObject as the base class.
+Because: GameObject class is SEALED in the Unity (!)
+
+==== NOT everything is Actor
+For example, there's NO reason to make the player controller class Actor!
+
+==== What's bad with approach of creating a single class hierarchy like in UE4: Actor <- Pawn etc:
+- We do NOT want to use the same Unity base class (Component/Behaviour/MonoBehaviour!) for ALL objects.
+
+
+============ Component-like hierarchy
+Represents extra behaviour (like damageable behaviour, for example).
+
+==== From what to inherit?
+
+==== What if we type component references with component-like classes inherited 
+from concrete MonoBehaviour/Behaviour/Component?
+- Tighly coupled to framework (what it will be changed in future Unity version, some new classes added?)
+- Only single component type is possible per component-like class (multiple inheritance is not supported by C#)
+
+==== What if we type component references with interfaces?
+- Enable/Disable of component is not possible directly, through the interface
+(with casting or provided interface method only!)
+- We cannot reference components by their interfaces in Inspector (Need we, after all?)
+
+=== Solution
+- Use Interface to reference the component-like parts;
+PROBLEM SOLUTION: Enable/Disable probilem solution: Provide a set of utils (like extension methods) 
+that cast to concrete behaviour type and Enable/Disable or throw exception on invalid cast.
+PROBLEM: How to reference the components (for example, for their creation)?
+
+
+==== Naming convention
+- Always name interface with I{ComponentName}Component,
+no matter whether it will be implemented like behaviour or mono-hevaiour.
+- Always postfix component class name with concrete name of the Unity's base class 
+(for example MonoBehaviour)
+
+Example:
+	Interace: IDamageableComponent
+	Class: DamageableMonoBehaviour
