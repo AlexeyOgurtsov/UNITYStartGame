@@ -74,19 +74,25 @@ public class ControllableTank : MonoBehaviour, IControllableTank
 		// @TODO
 	}
 
+	public void WhenPossessedBy(TankPlayerController newController)
+	{
+		turret?.WhenPossessedBy(new DamageInstigator(newController, gameObject));
+	}
+
 	protected void Awake()
 	{
 		Debug.Log($"{nameof(Awake)}; Sender=\"{name}\"");
-		LinkToTurret();
+		FindAndInitializeTurretAtUnityAwakeTime();
 		LinkToDamageableComponent();
 	}
 
-	void LinkToTurret()
+	void FindAndInitializeTurretAtUnityAwakeTime()
 	{
 		turret = GetComponentInChildren<ProjectileShooter>();
 		if(turret == null)
 		{
 			Debug.LogWarning($"Unable to find attached turret script");
+			return;
 		}
 	}
 

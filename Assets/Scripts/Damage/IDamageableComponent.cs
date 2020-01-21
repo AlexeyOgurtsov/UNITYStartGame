@@ -49,7 +49,7 @@ public class MaxHitCountChangingEventArgs : System.EventArgs
 };
 
 // Interface for damageable scripts
-public interface IDamageableComponent
+public interface IDamageableComponent : IDamageSubsystemComponent
 {
 	event System.EventHandler<HitCountChangedEventArgs> HitCountChanged;
 	event System.EventHandler<HitCountChangingEventArgs> HitCountChanging;
@@ -89,9 +89,9 @@ public static class DamageableExtensions
 		damageState.MaxHits = newMaxHitCount;
 		damageable.SetDamageState(damageState);
 	}
-	public static int MakeDamage(this IDamageableComponent damageable, int amount)
+	public static int MakeDamage(this IDamageableComponent damageable, Damage damage)
 	{
-		return damageable.SetHitCount(damageable.HitCount - amount);
+		return damageable.SetHitCount(damageable.HitCount - damage.Amount);
 	}
 
 	public static int GetMaxHits(this IDamageableComponent damageable) => damageable.GetDamageState().MaxHits;
@@ -99,81 +99,4 @@ public static class DamageableExtensions
 	public static bool AreHitsMaximum(this IDamageableComponent damageable) => damageable.HitCount == damageable.MaxHitCount;
 	// Checks whether the given hit count is at zero or below zero
 	public static bool IsTotallyDamaged(this IDamageableComponent damageable) => damageable.HitCount <= 0;
-}
-public static class DamageableUtils
-{
-	public static int MakeDamage(GameObject gameObject, int damage, bool bLogOnFailure = false)
-	{
-		Component mainScript = gameObject.GetComponent<IMyGameObject>() as Component;
-		if(mainScript == null)
-		{
-			// if failed to find the main script, try to find the damageable component directly
-			// (some objects may contain NO main script, but do contain the damageable component)
-			IDamageableComponent damageable = gameObject.GetComponent<IDamageableComponent>();
-			if(damageable != null)
-			{
-				return damageable.MakeDamage(damage);
-			}
-			else
-			{
-				if(bLogOnFailure)
-				{
-					Debug.LogWarning("{gameObject.name} does NOT contain damageable component");
-				}
-			}
-		}
-		else
-		{
-			return MakeDamageForMainScript(mainScript, damage, bLogOnFailure);
-		}
-		return 0;
-	}
-
-	// This function must be called on the main game object script (i.e. script that may support IMyGameObject)
-	public static int MakeDamageForMainScript(Object gameObject, int damage, bool bLogOnFailure = false)
-	{
-		Contract.Assert(gameObject != null);
-		if(gameObject is IMyGameObject myobj)
-		{
-			IDamageableComponent damageable = myobj.GetDamageable();
-			if(damageable != null)
-			{
-				return damageable.MakeDamage(damage);
-			}
-			else
-			{
-				if(bLogOnFailure)
-				{
-					Debug.LogWarning($"{nameof(GameObject)} {gameObject.name} is NOT damageable ( GetDamageable() returned null )!");
-				}
-			}
-		}
-		else
-		{
-			if(bLogOnFailure)
-			{
-				Debug.LogWarning($"{nameof(GameObject)} {gameObject.name} is NOT instance of the {nameof(IMyGameObject)} interface!");
-			}
-		}
-		return 0;
-	}
-	public static int MakeDamageForDamageableObject(Object component, int damage, bool bLogOnFailure = false)
-	{
-		Contract.Assert(component != null);
-		if(component is IDamageableComponent damageable)
-		{
-			return damageable.MakeDamage(damage);
-		}
-		else
-		{
-			if(bLogOnFailure)
-			{
-				if(component is Object obj)
-				{
-					Debug.LogWarning($"object {obj.name} does NOT support {nameof(IDamageableComponent)} interface!");
-				}
-			}
-		}
-		return 0;
-	}
 }

@@ -13,6 +13,8 @@ public class DamageableMonoBehaviour : MonoBehaviour, IDamageableComponent
 	public event System.EventHandler<MaxHitCountChangedEventArgs> MaxHitCountChanged;
 	public event System.EventHandler<MaxHitCountChangingEventArgs> MaxHitCountChanging;
 
+	public DamageInstigator Instigator { get; set; }
+
 	public int HitCount => damageState.Hits;
 	public int MaxHitCount 
 	{

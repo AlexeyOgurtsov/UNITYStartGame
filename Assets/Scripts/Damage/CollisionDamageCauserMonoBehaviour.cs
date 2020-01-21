@@ -1,22 +1,17 @@
 using UnityEngine;
 
-[AddComponentMenu("Damage/CollisionDamager")]
-public class CollisionDamagerComponentMonoBehaviour : MonoBehaviour, IDamageCauserComponent
+[AddComponentMenu("Damage/CollisionDamageCauser")]
+public class CollisionDamageCauserMonoBehaviour : MonoBehaviour, IDamageCauserComponent
 {
-	const int DefaultDamage = 10;
+	const int DefaultDamageAmount = 10;
 
-	public int damage = DefaultDamage;
+	public int DamageAmount = DefaultDamageAmount;
 	public bool ShouldSelfDestructOnMakeDamage = true;
 
-	public GameObject InstigatorPawnField;
 	public bool ShouldDamageInstigatorField;
 
 	#region IDamageCauserComponent properties
-	public GameObject InstigatorPawn
-	{
-		get => InstigatorPawnField;
-		set => InstigatorPawnField = value;
-	}
+	public DamageInstigator Instigator { get; set; }
 	public bool ShouldDamageInstigator
 	{
 		get => ShouldDamageInstigatorField;
@@ -26,7 +21,7 @@ public class CollisionDamagerComponentMonoBehaviour : MonoBehaviour, IDamageCaus
 
 	void OnCollisionEnter2D(Collision2D collision)
 	{
-		Debug.Log($"{nameof(CollisionDamagerComponentMonoBehaviour)}: {nameof(OnCollisionEnter2D)}");
+		Debug.Log($"{nameof(CollisionDamageCauserMonoBehaviour)}: {nameof(OnCollisionEnter2D)}");
 
 		if(collision.gameObject != null)
 		{
@@ -39,7 +34,7 @@ public class CollisionDamagerComponentMonoBehaviour : MonoBehaviour, IDamageCaus
 
 	bool ShouldDamageGameObject(GameObject gameObject)
 	{
-		if (InstigatorPawn == gameObject && !ShouldDamageInstigator)
+		if (Instigator.Pawn == gameObject && !ShouldDamageInstigator)
 		{
 			return false;
 		}
@@ -49,11 +44,16 @@ public class CollisionDamagerComponentMonoBehaviour : MonoBehaviour, IDamageCaus
 	void DoMakeDamageOnGameObject(GameObject gameObject)
 	{
 		// @TODO: Spawn explosition fx
-		DamageableUtils.MakeDamage(gameObject, damage, true);
+		DamageUtils.MakeDamageIfDamageableGameObject(gameObject, DamageToCause);
 
 		if (ShouldSelfDestructOnMakeDamage)
 		{
 			Destroy(this.gameObject);
 		}
+	}
+
+	Damage DamageToCause
+	{
+		get => new Damage(DamageAmount, Instigator);
 	}
 }

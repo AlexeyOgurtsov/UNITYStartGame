@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public interface IDamageCauserComponent
+public interface IDamageCauserComponent : IDamageSubsystemComponent
 {
-	GameObject InstigatorPawn { get; set; }
 	bool ShouldDamageInstigator { get; set; }
 }

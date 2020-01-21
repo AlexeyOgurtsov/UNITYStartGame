@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6035733905511225497}
   - component: {fileID: 4930503410609117805}
   - component: {fileID: -8701527475785991168}
+  - component: {fileID: -364550370019225300}
   m_Layer: 0
   m_Name: TestTankProjectile
   m_TagString: Untagged
@@ -145,4 +146,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5882013d59981024bb87efa24ac642b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InstigatorPawn: {fileID: 0}
+--- !u!114 &-364550370019225300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6035733905511225500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f84a268cf3bff74f84bb9df377d3d8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DamageAmount: 10
+  ShouldSelfDestructOnMakeDamage: 1
+  ShouldDamageInstigatorField: 0

@@ -16,13 +16,20 @@ public class ProjectileShooter : MonoBehaviour
 	const float DefaultMinSecondsBetweenShots = 1;
 	const int DefaultShotCount = 10;
 
+	DamageInstigator instigator;
+
 	public Projectile ProjectileTemplate;
 	public float MinSecondsBetweenShots = DefaultMinSecondsBetweenShots;
 	public int ShotCount = DefaultShotCount;
 	public bool IsShotCountLimited = true;
 	public Vector2 MuzzleOffset; 
 
-	public bool bLogGameplayFailsInsideCanFire = false;
+	public bool ShouldLogGameplayFailsInsideCanFire = false;
+
+	public void WhenPossessedBy(DamageInstigator instigator)
+	{
+		this.instigator = instigator;
+	}
 
 	public float MinAllowedNextShotTime
 	{
@@ -57,32 +64,37 @@ public class ProjectileShooter : MonoBehaviour
 	bool CanFireDueToNextShotTime(float currentTime) => currentTime >= MinAllowedNextShotTime;
 	void LogFireDueToNextShotTime_IfLoggingItEnabled(float currentTime)
 	{
-		if (bLogGameplayFailsInsideCanFire)
-		{
-			Debug.Log($"Gameplay prohibits fire due to next shot time: {nameof(currentTime)}={currentTime}; {nameof(MinAllowedNextShotTime)}={MinAllowedNextShotTime}");
-		}
+		LogUtils.LogIf(ShouldLogGameplayFailsInsideCanFire, $"Gameplay prohibits fire due to next shot time: {nameof(currentTime)}={currentTime}; {nameof(MinAllowedNextShotTime)}={MinAllowedNextShotTime}");
 	}
 
 	bool CanFireDueToShotCount() => !IsShotCountLimited || ShotCount > 0;
 	void LogFireDueToShotCount_IfLoggingItEnabled()
 	{
-		if (bLogGameplayFailsInsideCanFire)
-		{
-			Debug.Log($"Gameplay prohibits fire due to shot count: {nameof(IsShotCountLimited)}={IsShotCountLimited}; {nameof(ShotCount)}={ShotCount}");
-		}
+		LogUtils.LogIf(ShouldLogGameplayFailsInsideCanFire, $"Gameplay prohibits fire due to shot count: {nameof(IsShotCountLimited)}={IsShotCountLimited}; {nameof(ShotCount)}={ShotCount}");
 	}
 
 	void DoFire()
 	{		
-		Contract.Assert(ProjectileTemplate != null);
-		if (!Instantiate(ProjectileTemplate, ComputeMuzzleWorldPosition3D(), transform.rotation))
+		if (!InstantiateProjectile())
 		{
-			Debug.LogError($"Failed to instantiate projectile of class \"{ProjectileTemplate?.GetType()}\"");
 			return;
 		}
-		// @TODO: Initialize projectile here: setup instigator
+
 		MinAllowedNextShotTime = Time.time + MinSecondsBetweenShots;
 		DecreaseShotCountIfShould();
+	}
+
+	Projectile InstantiateProjectile()
+	{
+		Contract.Assert(ProjectileTemplate != null);
+		Projectile instantiatedProjectile = Instantiate(ProjectileTemplate, ComputeMuzzleWorldPosition3D(), transform.rotation);
+		if (!instantiatedProjectile)
+		{
+			Debug.LogError($"Failed to instantiate projectile of class \"{ProjectileTemplate?.GetType()}\"");
+			return null;
+		}
+		DamageUtils.SetInstigatorForDamageSubsystemComponents(instantiatedProjectile.gameObject, instigator);
+		return instantiatedProjectile;
 	}
 
 	Vector3 ComputeMuzzleWorldPosition3D()

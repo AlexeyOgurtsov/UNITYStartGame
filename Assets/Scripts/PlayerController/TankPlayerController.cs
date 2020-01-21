@@ -209,6 +209,15 @@ public class TankPlayerController : MonoBehaviour
 	// To be called right after the possessed tank is changed
 	void InitializeOnPossess()
 	{
+		InitializeDamageableOnPossess();
+		if(ControllableTank)
+		{
+			ControllableTank.WhenPossessedBy(this);
+		}
+	}
+
+	void InitializeDamageableOnPossess()
+	{
 		Damageable = ControllableTank ? ControllableTank.GetComponent<IDamageableComponent>() : null;
 		if(DebugDamageableGUI != null)
 		{
