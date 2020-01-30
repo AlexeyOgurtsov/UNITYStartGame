@@ -10,5 +10,5 @@
 
 
 ----- Turret
-BUG: All projectiles are fired when a single key is pressed.
+BUG: All projectiles are fired when a single key is pressed. (+FIXED)
 

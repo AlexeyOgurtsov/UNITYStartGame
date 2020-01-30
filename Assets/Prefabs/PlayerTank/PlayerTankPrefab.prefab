@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 1310015290066247340}
   - component: {fileID: 6709085172561088998}
   - component: {fileID: 2668149054843739123}
-  - component: {fileID: 8086190120147464558}
+  - component: {fileID: 8316872990596128050}
+  - component: {fileID: 5348872408090069957}
   m_Layer: 0
   m_Name: PlayerTankPrefab
   m_TagString: Untagged
@@ -121,7 +122,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90a74d75a396bfd43a5f4609002d1758, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8086190120147464558
+  movement:
+    ThrustImpulse: 0.0000001
+    ThrustMode2D: 1
+    RotationDegsPerSec: 30
+--- !u!50 &8316872990596128050
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310015290066247341}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1000
+  m_LinearDrag: 6
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!114 &5348872408090069957
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -153,7 +179,7 @@ MonoBehaviour:
   ShotCount: 10
   IsShotCountLimited: 1
   MuzzleOffset: {x: 0, y: 0}
-  bLogGameplayFailsInsideCanFire: 0
+  ShouldLogGameplayFailsInsideCanFire: 0
 --- !u!1001 &3226205781400557088
 PrefabInstance:
   m_ObjectHideFlags: 0

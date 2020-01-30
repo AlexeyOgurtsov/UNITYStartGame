@@ -1,0 +1,10 @@
+----------------------------------------------------
+- Tank must get to the given point on the map.
+- Camera follows player.
+- Static enemy turrets;
+
+-----------------------------------------------------
+TODO Scheme
+1. Make move (+DONE)
+2. Make camera follow
+3. Create goal

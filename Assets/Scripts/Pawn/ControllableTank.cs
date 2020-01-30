@@ -3,6 +3,35 @@
 
 using UnityEngine;
 
+[System.Serializable]
+public class ControllableTankMovement
+{
+	ControllableTank tank;
+	Rigidbody2D rb;
+
+	public float ThrustImpulse = 10000;
+	public ForceMode2D ThrustMode2D = ForceMode2D.Impulse;
+	public float RotationDegsPerSec = 10;
+
+	public ControllableTankMovement(ControllableTank tank)
+	{
+		this.tank = tank;
+		rb = tank.GetComponent<Rigidbody2D>();
+	}
+
+	public void Thrust(float axisValue)
+	{
+		Vector2 thrustForceParameter = axisValue * ThrustImpulse * tank.transform.up * Time.fixedDeltaTime;
+		rb.AddForce(thrustForceParameter, ThrustMode2D);
+	}
+
+	public void Rotate(float axisValue)
+	{
+		rb.MoveRotation(rb.rotation + RotationDegsPerSec * axisValue * Time.fixedDeltaTime);
+	}
+}
+
+[RequireComponent(typeof(Rigidbody2D))]
 public class ControllableTank : MonoBehaviour, IControllableTank
 {
 	const float RotationSpeedDegs = 10.0F;
@@ -12,6 +41,8 @@ public class ControllableTank : MonoBehaviour, IControllableTank
 		Turret,
 		AltFire
 	};
+
+	public ControllableTankMovement movement;
 
 	IDamageableComponent damageable;
 	ProjectileShooter turret;
@@ -66,12 +97,12 @@ public class ControllableTank : MonoBehaviour, IControllableTank
 
 	public void Thrust(float axisValue)
 	{
-		// @TODO
+		movement.Thrust(axisValue);
 	}
 
 	public void Rotate(float axisValue)
 	{
-		// @TODO
+		movement.Rotate(axisValue);
 	}
 
 	public void WhenPossessedBy(TankPlayerController newController)
@@ -82,6 +113,7 @@ public class ControllableTank : MonoBehaviour, IControllableTank
 	protected void Awake()
 	{
 		Debug.Log($"{nameof(Awake)}; Sender=\"{name}\"");
+		movement = new ControllableTankMovement(this);
 		FindAndInitializeTurretAtUnityAwakeTime();
 		LinkToDamageableComponent();
 	}
